@@ -15,7 +15,7 @@ const Popup = () => {
     });
   }, []);
 
-  const changeBackground = () => {
+  const submitJournalUrl = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       const tab = tabs[0];
       if (tab.id) {
@@ -32,19 +32,13 @@ const Popup = () => {
     });
   };
 
+
   return (
     <>
       <ul style={{ minWidth: "700px" }}>
         <li>Current URL: {currentURL}</li>
-        <li>Current Time: {new Date().toLocaleTimeString()}</li>
       </ul>
-      <button
-        onClick={() => setCount(count + 1)}
-        style={{ marginRight: "5px" }}
-      >
-        count up
-      </button>
-      <button onClick={changeBackground}>change background</button>
+      <button onClick={submitJournalUrl}>Summarize Journal</button>
     </>
   );
 };
