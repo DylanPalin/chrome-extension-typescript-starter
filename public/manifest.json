@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
 
-  "name": "Chrome Extension TypeScript Starter",
-  "description": "Chrome Extension, TypeScript, Visual Studio Code",
+  "name": "MedSummary",
+  "description": "A chrome extension to summarize medical journals.",
   "version": "1.0",
 
   "options_ui": {
