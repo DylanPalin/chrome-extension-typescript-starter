@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const Popup = () => {
   const [count, setCount] = useState(0);
@@ -11,34 +12,35 @@ const Popup = () => {
 
   useEffect(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      setCurrentURL(tabs[0].url);
+      setCurrentURL(tabs[0]?.url);
     });
   }, []);
 
-  const submitJournalUrl = () => {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      const tab = tabs[0];
-      if (tab.id) {
-        chrome.tabs.sendMessage(
-          tab.id,
-          {
-            color: "#555555",
-          },
-          (msg) => {
-            console.log("result message:", msg);
-          }
-        );
-      }
-    });
-  };
+  const submitUrl = async () => {
+    if (currentURL) {
+    const journal = currentURL;
 
+    const genAI = new GoogleGenerativeAI(process.env.API_KEY || "");
+
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const prompt = "Summarize this journal to a medium length: " + journal;
+    
+    console.log(prompt);
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+    console.log(text);
+    }
+  };
 
   return (
     <>
       <ul style={{ minWidth: "700px" }}>
         <li>Current URL: {currentURL}</li>
       </ul>
-      <button onClick={submitJournalUrl}>Summarize Journal</button>
+      <button onClick={submitUrl}>Summarize Journal</button>
     </>
   );
 };
